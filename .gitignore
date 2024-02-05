@@ -1,0 +1,5 @@
+*.env
+caddy/config/*
+caddy/data/*
+tailscale/tmp/*
+tailscale/varlib/*

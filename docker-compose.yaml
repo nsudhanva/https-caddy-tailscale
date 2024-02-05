@@ -1,0 +1,61 @@
+version: "3.7"
+
+networks:
+  proxy-network:
+    name: proxy-network
+
+services:
+  caddy:
+    image: caddy:latest
+    restart: unless-stopped
+    container_name: caddy
+    hostname: caddy
+    networks:
+      - proxy-network
+    depends_on:
+      - tailscale 
+      - web1
+      - web2
+      - web3
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - /Users/sudhanva/Code/personal/https/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /Users/sudhanva/Code/personal/https/caddy/data:/data
+      - /Users/sudhanva/Code/personal/https/caddy/config:/config
+      - /Users/sudhanva/Code/personal/https/tailscale/tmp/tailscaled.sock:/var/run/tailscale/tailscaled.sock
+
+  tailscale:
+    env_file: .env
+    container_name: tailscaled
+    image: tailscale/tailscale
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - /dev/net/tun:/dev/net/tun
+      - /Users/sudhanva/Code/personal/https/tailscale/varlib:/var/lib
+      - /Users/sudhanva/Code/personal/https/tailscale/tmp:/tmp
+    environment:
+      - TS_STATE_DIR=/var/lib/tailscale
+
+  web1:
+    image: httpd:latest
+    container_name: web1
+    networks:
+      - proxy-network
+
+  web2:
+    image: httpd:latest
+    container_name: web2
+    networks:
+      - proxy-network
+
+  web3:
+    image: httpd:latest
+    container_name: web3
+    networks:
+      - proxy-network

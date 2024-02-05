@@ -1,0 +1,19 @@
+(network_paths) {
+  handle_path /web1/* {
+    reverse_proxy web1:80
+  }
+  handle_path /web2/* {
+    reverse_proxy web2:80
+  }
+  handle_path /web3/* {
+    reverse_proxy web3:80
+  }
+}
+
+docker-desktop.ainu-herring.ts.net {
+  import network_paths
+}
+
+http://192.168.0.31 {
+  import network_paths
+}
