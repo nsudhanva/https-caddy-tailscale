@@ -22,10 +22,10 @@ services:
       - "443:443"
       - "443:443/udp"
     volumes:
-      - /Users/sudhanva/Code/personal/https/caddy/Caddyfile:/etc/caddy/Caddyfile
-      - /Users/sudhanva/Code/personal/https/caddy/data:/data
-      - /Users/sudhanva/Code/personal/https/caddy/config:/config
-      - /Users/sudhanva/Code/personal/https/tailscale/tmp/tailscaled.sock:/var/run/tailscale/tailscaled.sock
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy/data:/data
+      - ./caddy/config:/config
+      - ./tailscale/tmp/tailscaled.sock:/var/run/tailscale/tailscaled.sock
 
   tailscale:
     env_file: .env
@@ -37,8 +37,8 @@ services:
       - NET_RAW
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - /Users/sudhanva/Code/personal/https/tailscale/varlib:/var/lib
-      - /Users/sudhanva/Code/personal/https/tailscale/tmp:/tmp
+      - ./tailscale/varlib:/var/lib
+      - ./tailscale/tmp:/tmp
     environment:
       - TS_STATE_DIR=/var/lib/tailscale
 
