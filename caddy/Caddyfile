@@ -10,10 +10,14 @@
   }
 }
 
-docker-desktop.ainu-herring.ts.net {
+# Replace with your actual Tailscale domain (e.g., my-server.my-tailnet.ts.net)
+# Find it in your Tailscale admin console: https://login.tailscale.com/admin/machines
+your-machine-name.your-tailnet.ts.net {
   import network_paths
 }
 
+# Optional: For local LAN access over HTTP
+# You can modify or remove this if not needed.
 http://192.168.0.31 {
   import network_paths
 }
