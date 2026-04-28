@@ -6,7 +6,7 @@ networks:
 
 services:
   caddy:
-    image: caddy:2.11.2
+    image: caddy:latest
     restart: unless-stopped
     container_name: caddy
     hostname: caddy
@@ -30,7 +30,7 @@ services:
   tailscale:
     env_file: .env
     container_name: tailscaled
-    image: tailscale/tailscale:v1.96.5
+    image: tailscale/tailscale:latest
     network_mode: host
     cap_add:
       - NET_ADMIN
@@ -43,19 +43,19 @@ services:
       - TS_STATE_DIR=/var/lib/tailscale
 
   web1:
-    image: httpd:2.4.66
+    image: httpd:latest
     container_name: web1
     networks:
       - proxy-network
 
   web2:
-    image: httpd:2.4.66
+    image: httpd:latest
     container_name: web2
     networks:
       - proxy-network
 
   web3:
-    image: httpd:2.4.66
+    image: httpd:latest
     container_name: web3
     networks:
       - proxy-network
