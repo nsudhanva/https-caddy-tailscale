@@ -144,5 +144,4 @@ This setup demonstrates several best practices:
 -   **Network Segmentation:** The `proxy-network` isolates backend services.
 -   **Clear Configuration:** Caddyfile snippets promote readability and maintainability.
 
-Happy self-hosting!
-```
+
