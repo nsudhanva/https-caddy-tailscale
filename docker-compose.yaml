@@ -1,5 +1,3 @@
-version: "3.7"
-
 networks:
   proxy-network:
     name: proxy-network
@@ -13,7 +11,7 @@ services:
     networks:
       - proxy-network
     depends_on:
-      - tailscale 
+      - tailscale
       - web1
       - web2
       - web3

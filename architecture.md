@@ -1,22 +1,32 @@
+# Architecture
+
 ```mermaid
 graph TD
-    User[External User] -->|HTTPS via Tailscale VPN| CaddyService[Caddy Container Port 443]
+    User[Client on tailnet] -->|HTTPS| Caddy[Caddy :443]
 
-    subgraph Docker Host
-        CaddyService -->|Reverse Proxy via proxy-network| Web1[web1:80 on proxy-network]
-        CaddyService -->|Reverse Proxy via proxy-network| Web2[web2:80 on proxy-network]
-        CaddyService -->|Reverse Proxy via proxy-network| Web3[web3:80 on proxy-network]
+    subgraph Host[Docker host]
+        Caddy -->|/web1| Web1[web1:80]
+        Caddy -->|/web2| Web2[web2:80]
+        Caddy -->|/web3| Web3[web3:80]
 
-        CaddyService <-->|Uses tailscaled.sock| TailscaleService[Tailscale Container]
-        TailscaleService -->|Connects to| TailscaleVPN[Tailscale VPN]
+        Caddy <-->|tailscaled.sock| Tailscale[tailscale]
+        Tailscale --> Tailnet[Tailscale tailnet]
 
-        subgraph "proxy-network (Docker Network)"
+        subgraph ProxyNet[proxy-network]
             Web1
             Web2
             Web3
         end
     end
 
-    User -->|Potentially HTTP local access| CaddyServicePort80[Caddy Container Port 80]
-    CaddyServicePort80 -->|Forwards to HTTPS or serves local IP| CaddyService
+    Lan[LAN client] -->|optional HTTP| Caddy80[Caddy :80]
+    Caddy80 --> Caddy
 ```
+
+## Notes
+
+- Caddy terminates HTTPS for the Tailscale `.ts.net` name.
+- Caddy reaches backend services over `proxy-network`.
+- Tailscale state is persisted under `./tailscale/varlib`.
+- Caddy data and config are persisted under `./caddy`.
+- The LAN HTTP block is optional and should match your local network.
